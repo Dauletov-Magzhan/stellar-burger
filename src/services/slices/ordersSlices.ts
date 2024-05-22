@@ -1,11 +1,14 @@
-import { orderBurgerApi } from "@api";
+import { getFeedsApi, getOrdersApi, orderBurgerApi } from "@api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TConstructorItems, TIngredient, TOrder } from "@utils-types";
+import { thunk } from "redux-thunk";
 
 interface OrderInitialState {
     ingredients: TIngredient[]
-    orderModalData: TOrder | null,
-    orders: TOrder[],
+    orderModalData: TOrder | null
+    orders: TOrder[]
+    ordersTotal: number
+    ordersToday: number
     orderRequest: boolean
     constructorItems: TConstructorItems
 }
@@ -14,6 +17,8 @@ const initialState: OrderInitialState = {
     ingredients: [],
     orderModalData: null,
     orders: [],
+    ordersTotal: 0,
+    ordersToday: 0,
     orderRequest: false,
     constructorItems: {
         bun: {
@@ -27,7 +32,31 @@ export const fetchOrderBurger = createAsyncThunk(
     'order/orderBurger',
     async (data: string[], thunkApi) => {
         try{
-            const res = orderBurgerApi(data)
+            const res = await orderBurgerApi(data)
+            return res
+        } catch (err) {
+            return thunkApi.rejectWithValue(err)
+        }
+    }
+)
+
+export const fetchFeeds = createAsyncThunk(
+    'order/feeds',
+    async (_, thunkApi) => {
+        try{
+            const res = await getFeedsApi()
+            return res
+        } catch (err) {
+            return thunkApi.rejectWithValue(err)
+        }
+    }
+)
+
+export const fetchOrders = createAsyncThunk(
+    'order/orders',
+    async (_, thunkApi) => {
+        try{
+            const res = await getOrdersApi()
             return res
         } catch (err) {
             return thunkApi.rejectWithValue(err)
@@ -55,7 +84,16 @@ export const ordersSlices = createSlice({
         },
         selectOrderRequest: (state) => {
             return state.orderRequest
-        }
+        },
+        selectOrders: (state) => {
+            return state.orders
+        },
+        selectOredersTotal: (state) => {
+            return state.ordersTotal
+        },
+        selectOrdersToday: (state) => {
+            return state.ordersToday
+        },
     },
     extraReducers: (builder) => {
         builder 
@@ -69,9 +107,17 @@ export const ordersSlices = createSlice({
             .addCase(fetchOrderBurger.rejected, (state) => {
                 state.orderRequest = false
             })
+            .addCase(fetchFeeds.fulfilled, (state, action) => {
+                state.orders = action.payload.orders
+                state.ordersTotal = action.payload.total
+                state.ordersToday = action.payload.totalToday
+            })
+            .addCase(fetchOrders.fulfilled, (state, action) => {
+                state.orders = action.payload
+            })
     }
 })
 
-export const { selectOrderModalData, selectOrderRequest } = ordersSlices.selectors
+export const { selectOrderModalData, selectOrderRequest, selectOrders, selectOrdersToday, selectOredersTotal } = ordersSlices.selectors
 export const { closeOrderModalData } = ordersSlices.actions
 export default ordersSlices.reducer
