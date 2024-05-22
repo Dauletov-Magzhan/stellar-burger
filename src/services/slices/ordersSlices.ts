@@ -10,6 +10,7 @@ interface OrderInitialState {
     ordersTotal: number
     ordersToday: number
     orderRequest: boolean
+    userOrders: TOrder[]
     constructorItems: TConstructorItems
 }
 
@@ -26,6 +27,7 @@ const initialState: OrderInitialState = {
         },
         ingredients: []
       },
+    userOrders: []
 }
 
 export const fetchOrderBurger = createAsyncThunk(
@@ -76,7 +78,7 @@ export const ordersSlices = createSlice({
                 },
                 ingredients: []
               };
-        }
+        },
     },
     selectors: {
         selectOrderModalData: (state) => {
@@ -94,6 +96,9 @@ export const ordersSlices = createSlice({
         selectOrdersToday: (state) => {
             return state.ordersToday
         },
+        selectUserOrders: (state) => {
+            return state.userOrders
+        }
     },
     extraReducers: (builder) => {
         builder 
@@ -113,11 +118,11 @@ export const ordersSlices = createSlice({
                 state.ordersToday = action.payload.totalToday
             })
             .addCase(fetchOrders.fulfilled, (state, action) => {
-                state.orders = action.payload
+                state.userOrders = action.payload
             })
     }
 })
 
-export const { selectOrderModalData, selectOrderRequest, selectOrders, selectOrdersToday, selectOredersTotal } = ordersSlices.selectors
+export const { selectOrderModalData, selectOrderRequest, selectOrders, selectOrdersToday, selectOredersTotal, selectUserOrders } = ordersSlices.selectors
 export const { closeOrderModalData } = ordersSlices.actions
 export default ordersSlices.reducer
