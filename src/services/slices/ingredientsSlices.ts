@@ -3,21 +3,23 @@ import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import { TIngredient, TConstructorIngredient, TConstructorItems } from '@utils-types'
 import { v4 } from 'uuid'
 
-interface IngredientsListState {
+interface IngredientsInitialState {
     ingredients: TIngredient[]
     constructorItems: TConstructorItems
     isModalOpened: boolean
+    isLoading: boolean
 }
 
-const initialState: IngredientsListState = {
+const initialState: IngredientsInitialState = {
     ingredients: [],
     constructorItems: {
         bun: {
-          price: 0
+            price: 0
         },
         ingredients: []
       },
-    isModalOpened: false
+    isModalOpened: false,
+    isLoading: false
 }
 
 export const fetchIngredients = createAsyncThunk(
@@ -73,6 +75,13 @@ const ingredientsSlices = createSlice({
         builder
             .addCase(fetchIngredients.fulfilled, (state, action) => {
                 state.ingredients = action.payload
+                state.isLoading = false
+            })
+            .addCase(fetchIngredients.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(fetchIngredients.rejected, (state) => {
+                state.isLoading = false
             })
         
     },
