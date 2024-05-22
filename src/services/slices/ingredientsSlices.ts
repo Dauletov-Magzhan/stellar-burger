@@ -8,6 +8,7 @@ interface IngredientsInitialState {
     constructorItems: TConstructorItems
     isModalOpened: boolean
     isLoading: boolean
+    isModal: boolean
 }
 
 const initialState: IngredientsInitialState = {
@@ -19,7 +20,8 @@ const initialState: IngredientsInitialState = {
         ingredients: []
       },
     isModalOpened: false,
-    isLoading: false
+    isLoading: false,
+    isModal: false
 }
 
 export const fetchIngredients = createAsyncThunk(
@@ -54,10 +56,10 @@ const ingredientsSlices = createSlice({
             state.constructorItems.ingredients = state.constructorItems.ingredients.filter((_, ingredient) => ingredient !== ingredientId)
         },
         openModal(state){
-            state.isModalOpened = true
+
         },
-        closeModal(state){
-            state.isModalOpened = false
+        closeIsModal(state){
+            state.isModal = false
         }
     },
     selectors: {
@@ -89,5 +91,5 @@ const ingredientsSlices = createSlice({
 
 
 export const { selectIngredients, selectConstructorItems, selectIsModalOpened } = ingredientsSlices.selectors
-export const { addIngredient, removeIngredient, openModal, closeModal } = ingredientsSlices.actions
+export const { addIngredient, removeIngredient, openModal, closeIsModal } = ingredientsSlices.actions
 export default ingredientsSlices.reducer;

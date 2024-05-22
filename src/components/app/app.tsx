@@ -5,13 +5,14 @@ import styles from './app.module.css';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Feed, Login, Register, ForgotPassword, ResetPassword, Profile, ProfileOrders, NotFound404 } from '@pages';
 
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
-import { fetchIngredients } from '../../services/slices/ingredientsSlices';
+import { fetchIngredients, closeIsModal } from '../../services/slices/ingredientsSlices';
 
 const App = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(fetchIngredients())
@@ -19,7 +20,7 @@ const App = () => {
 
 
   const closeModal = () => {
-
+    navigate(-1)
   }
 
   return (
