@@ -8,17 +8,19 @@ import { useDispatch, useSelector } from '../../services/store';
 export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const orders: TOrder[] = useSelector(selectOrders);
-
-
 
   if (!orders.length) {
     return <Preloader />;
   }
 
-  return <FeedUI orders={orders} handleGetFeeds={() => {
-      dispatch(fetchFeeds())
-    }
-  } />;
+  return (
+    <FeedUI
+      orders={orders}
+      handleGetFeeds={() => {
+        dispatch(fetchFeeds());
+      }}
+    />
+  );
 };

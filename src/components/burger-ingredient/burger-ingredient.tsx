@@ -9,10 +9,10 @@ import { addIngredient } from '../../services/slices/ingredientsSlices';
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
     const location = useLocation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handleAdd = () => {
-      dispatch(addIngredient(ingredient))
+      dispatch(addIngredient(ingredient));
     };
 
     return (

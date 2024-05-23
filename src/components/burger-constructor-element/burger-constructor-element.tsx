@@ -6,14 +6,14 @@ import { removeIngredient } from '../../services/slices/ingredientsSlices';
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handleMoveDown = () => {};
 
     const handleMoveUp = () => {};
 
     const handleClose = () => {
-      dispatch(removeIngredient(ingredient))
+      dispatch(removeIngredient(ingredient));
     };
 
     return (

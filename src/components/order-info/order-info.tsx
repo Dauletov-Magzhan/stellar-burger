@@ -4,7 +4,7 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/slices/ingredientsSlices';
-import { selectOrderModalData, selectOrders } from '../../services/slices/ordersSlices';
+import { selectOrders } from '../../services/slices/ordersSlices';
 import { redirect, useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
@@ -15,9 +15,11 @@ export const OrderInfo: FC = () => {
     return null;
   }
 
-  const orders = useSelector(selectOrders)
+  const orders = useSelector(selectOrders);
 
-  const orderData = orders.find((item) => item.number === parseInt(params.number!))
+  const orderData = orders.find(
+    (item) => item.number === parseInt(params.number!)
+  );
 
   const ingredients: TIngredient[] = useSelector(selectIngredients);
 
@@ -68,5 +70,4 @@ export const OrderInfo: FC = () => {
   }
 
   return <OrderInfoUI orderInfo={orderInfo} />;
-
 };

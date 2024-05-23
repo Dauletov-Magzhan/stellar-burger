@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import {
   Button,
   ConstructorElement,
@@ -80,34 +80,31 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         <CurrencyIcon type='primary' />
       </div>
       <Button
-          htmlType='button'
-          type='primary'
-          size='large'
-          children='Оформить заказ'
-          onClick={onOrderClick}
-        />
-
+        htmlType='button'
+        type='primary'
+        size='large'
+        children='Оформить заказ'
+        onClick={onOrderClick}
+      />
     </div>
 
     {orderRequest && (
       <ProtectedRoute>
-      <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
-        <Preloader />
-      </Modal>
+        <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
+          <Preloader />
+        </Modal>
       </ProtectedRoute>
-
     )}
 
     {orderModalData && (
       <ProtectedRoute>
-      <Modal
-        onClose={closeOrderModal}
-        title={orderRequest ? 'Оформляем заказ...' : ''}
-      >
-        <OrderDetailsUI orderNumber={orderModalData.number} />
-      </Modal>
+        <Modal
+          onClose={closeOrderModal}
+          title={orderRequest ? 'Оформляем заказ...' : ''}
+        >
+          <OrderDetailsUI orderNumber={orderModalData.number} />
+        </Modal>
       </ProtectedRoute>
-
     )}
   </section>
 );

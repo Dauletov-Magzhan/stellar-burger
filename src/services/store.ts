@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   ingredients: ingredientsSlices,
   orders: ordersSlices,
   auth: authSlices
-}) // Заменить на импорт настоящего редьюсера
+}); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
   reducer: rootReducer,
