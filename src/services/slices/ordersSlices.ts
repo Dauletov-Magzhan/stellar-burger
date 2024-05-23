@@ -1,7 +1,7 @@
 import { getFeedsApi, getOrdersApi, orderBurgerApi } from "@api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TConstructorItems, TIngredient, TOrder } from "@utils-types";
-import { thunk } from "redux-thunk";
+import { produce } from 'immer'
 
 interface OrderInitialState {
     ingredients: TIngredient[]
@@ -12,6 +12,7 @@ interface OrderInitialState {
     orderRequest: boolean
     userOrders: TOrder[]
     constructorItems: TConstructorItems
+    error: string
 }
 
 const initialState: OrderInitialState = {
@@ -27,7 +28,8 @@ const initialState: OrderInitialState = {
         },
         ingredients: []
       },
-    userOrders: []
+    userOrders: [],
+    error: ''
 }
 
 export const fetchOrderBurger = createAsyncThunk(
@@ -71,13 +73,14 @@ export const ordersSlices = createSlice({
     initialState,
     reducers: {
         closeOrderModalData(state) {
+            state.orderRequest = false;
             state.orderModalData = null;
             state.constructorItems = {
                 bun: {
-                  price: 0
+                    price: 0
                 },
                 ingredients: []
-              };
+            }
         },
     },
     selectors: {
@@ -104,6 +107,12 @@ export const ordersSlices = createSlice({
         builder 
             .addCase(fetchOrderBurger.fulfilled, (state, action) => {
                 state.orderModalData = action.payload.order
+                state.constructorItems = {
+                    bun: {
+                        price: 0,
+                    },
+                    ingredients: []
+                  },
                 state.orderRequest = false
             })
             .addCase(fetchOrderBurger.pending, (state) => {
@@ -116,6 +125,9 @@ export const ordersSlices = createSlice({
                 state.orders = action.payload.orders
                 state.ordersTotal = action.payload.total
                 state.ordersToday = action.payload.totalToday
+            })
+            .addCase(fetchFeeds.rejected, (state, action) => {
+                state.error = action.error.message!
             })
             .addCase(fetchOrders.fulfilled, (state, action) => {
                 state.userOrders = action.payload

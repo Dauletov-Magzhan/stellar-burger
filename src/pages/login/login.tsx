@@ -2,7 +2,7 @@ import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { TLoginData } from '@api';
 import { useDispatch, useSelector } from '../../services/store';
-import { login, selectGetError, selectIsLoading } from '../../services/slices/authSlices';
+import { getUser, login, selectGetError, selectIsLoading } from '../../services/slices/authSlices';
 import { Preloader } from '@ui';
 
 export const Login: FC = () => {
@@ -20,7 +20,7 @@ export const Login: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(login(loginData))
+    dispatch(login(loginData)).then(() => {dispatch(getUser())})
   };
 
   if (isLoading) {

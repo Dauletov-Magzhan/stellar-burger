@@ -15,7 +15,8 @@ const initialState: IngredientsInitialState = {
     ingredients: [],
     constructorItems: {
         bun: {
-            price: 0
+            price: 0,
+            _id: ''
         },
         ingredients: []
       },
@@ -55,12 +56,6 @@ const ingredientsSlices = createSlice({
 
             state.constructorItems.ingredients = state.constructorItems.ingredients.filter((_, ingredient) => ingredient !== ingredientId)
         },
-        openModal(state){
-
-        },
-        closeIsModal(state){
-            state.isModal = false
-        }
     },
     selectors: {
         selectIngredients: (state) => {
@@ -91,5 +86,5 @@ const ingredientsSlices = createSlice({
 
 
 export const { selectIngredients, selectConstructorItems, selectIsModalOpened } = ingredientsSlices.selectors
-export const { addIngredient, removeIngredient, openModal, closeIsModal } = ingredientsSlices.actions
+export const { addIngredient, removeIngredient} = ingredientsSlices.actions
 export default ingredientsSlices.reducer;

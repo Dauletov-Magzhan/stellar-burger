@@ -5,12 +5,13 @@ import styles from './app.module.css';
 import { AppHeader, Modal, OrderInfo, IngredientDetails, FeedInfo } from '@components';
 import { Feed, Login, Register, ForgotPassword, ResetPassword, Profile, ProfileOrders, NotFound404 } from '@pages';
 
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
-import { fetchIngredients, closeIsModal } from '../../services/slices/ingredientsSlices';
-import { fetchFeeds, fetchOrders } from '../../services/slices/ordersSlices';
+import { fetchIngredients} from '../../services/slices/ingredientsSlices';
+import { fetchFeeds  } from '../../services/slices/ordersSlices';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { getUser, initializeAuth } from '../../services/slices/authSlices';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -19,6 +20,8 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchIngredients())
     dispatch(fetchFeeds())
+    dispatch(initializeAuth())
+    dispatch(getUser())
   }, [])
 
 
@@ -39,9 +42,9 @@ const App = () => {
           <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path='/profile/orders' element={<ProtectedRoute><ProfileOrders /></ProtectedRoute>} />
           <Route path='*' element={<NotFound404 />}/>
-          <Route path='/feed/:number' element={<Modal title='' onClose={() => closeModal()}><FeedInfo /></Modal>} />
+          <Route path='/feed/:number' element={<Modal title='Заказ' onClose={() => closeModal()}><OrderInfo /></Modal>} />
           <Route path='/ingredients/:id' element={<Modal title='Детали ингредиента' onClose={() => closeModal()}><IngredientDetails /></Modal>} />
-          <Route path='/profile/orders/:number' element={<ProtectedRoute><Modal title='' onClose={() => closeModal()}><OrderInfo /></Modal></ProtectedRoute>}  />
+          <Route path='/profile/orders/:number' element={<ProtectedRoute><Modal title='Заказ' onClose={() => closeModal()}><OrderInfo /></Modal></ProtectedRoute>}  />
         </Routes>
       </div>
   )

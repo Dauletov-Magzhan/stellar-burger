@@ -1,10 +1,7 @@
 import { TLoginData, TRegisterData, forgotPasswordApi, getUserApi, loginUserApi, logoutApi, registerUserApi, updateUserApi } from "@api";
 import { PayloadAction, createAsyncThunk, createSlice, isAction, } from "@reduxjs/toolkit";
 import { TUser } from "@utils-types";
-import { deleteCookie, setCookie } from "../../utils/cookie";
-
-const ACCESS_TOKEN = 'accessToken'
-const REFRESH_TOKEN = 'refreshToken'
+import { deleteCookie, getCookie, setCookie } from "../../utils/cookie";
 
 interface AuthState {
     user: TUser
@@ -89,9 +86,18 @@ export const authSlices = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        removeErrorText(state) {
-            state.errorText = ''
+        initializeAuth(state) {
+            const accessToken = getCookie('accessToken');
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (accessToken && refreshToken) {
+                state.accessToken = accessToken;
+                state.isAuthChecked = true;
+            } else {
+                state.isAuthChecked = false;
+                state.accessToken = null;
+            }
         }
+
     },
     selectors: {
         selectGetUser: (state) => {
@@ -110,8 +116,8 @@ export const authSlices = createSlice({
     extraReducers(builder) {
         builder
         .addCase(register.fulfilled, (state, action) => {
-            setCookie(ACCESS_TOKEN, action.payload.accessToken)
-            localStorage.setItem(REFRESH_TOKEN, action.payload.refreshToken)
+            setCookie('accessToken', action.payload.accessToken)
+            localStorage.setItem('refreshToken', action.payload.refreshToken)
             state.isAuthChecked = true
             state.isLoading = false
         })
@@ -123,8 +129,8 @@ export const authSlices = createSlice({
             state.errorText = action.error.message!
         })
         .addCase(login.fulfilled, (state, action) => {
-            setCookie(ACCESS_TOKEN, action.payload.accessToken)
-            localStorage.setItem(REFRESH_TOKEN, action.payload.refreshToken)
+            setCookie('accessToken', action.payload.accessToken)
+            localStorage.setItem('refreshToken', action.payload.refreshToken)
             state.isAuthChecked = true
             state.isLoading = false
         })
@@ -136,8 +142,8 @@ export const authSlices = createSlice({
             state.errorText = action.error.message!
         })
         .addCase(logout.fulfilled, (state) => {
-            deleteCookie(ACCESS_TOKEN)
-            localStorage.removeItem(REFRESH_TOKEN)
+            deleteCookie('accessToken')
+            localStorage.removeItem('refreshToken')
             state.user = {
                 name: '',
                 email: ''
@@ -157,7 +163,7 @@ export const authSlices = createSlice({
             state.user.email = action.payload.user.email
             state.user.name = action.payload.user.name
             state.isAuthChecked = true
-            state.accessToken = localStorage.getItem(REFRESH_TOKEN)
+            state.accessToken = localStorage.getItem('refreshToken')
         })
         .addCase(getUser.pending, (state) => {
             state.isLoading = true
@@ -170,8 +176,8 @@ export const authSlices = createSlice({
                 name: '',
                 email: ''
             }
-            deleteCookie(ACCESS_TOKEN)
-            localStorage.removeItem(REFRESH_TOKEN)
+            deleteCookie('accessToken')
+            localStorage.removeItem('refreshToken')
         })
         .addCase(updateUser.fulfilled, (state, action) => {
             state.isLoading = false;
@@ -192,6 +198,6 @@ export const authSlices = createSlice({
 
 
 
-export const { removeErrorText } = authSlices.actions
+export const { initializeAuth } = authSlices.actions
 export const { selectGetUser, selectIsAuthChecked, selectGetError, selectIsLoading } = authSlices.selectors
 export default authSlices.reducer

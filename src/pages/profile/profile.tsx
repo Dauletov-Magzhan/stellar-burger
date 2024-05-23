@@ -1,12 +1,13 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { selectGetError, selectGetUser, selectIsLoading, updateUser } from '../../services/slices/authSlices';
+import { getUser, selectGetError, selectGetUser, selectIsLoading, updateUser } from '../../services/slices/authSlices';
 import { useDispatch, useSelector } from '../../services/store';
 import { Preloader } from '@ui';
 
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */
   const dispatch = useDispatch()
+  
   const user = useSelector(selectGetUser)
   const isLoading = useSelector(selectIsLoading)
 
@@ -17,6 +18,7 @@ export const Profile: FC = () => {
   });
 
   useEffect(() => {
+    dispatch(getUser())
     setFormValue((prevState) => ({
       ...prevState,
       name: user?.name || '',

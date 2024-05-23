@@ -4,26 +4,35 @@ import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { selectConstructorItems } from '../../services/slices/ingredientsSlices';
 import { closeOrderModalData, fetchOrderBurger, selectOrderModalData, selectOrderRequest } from '../../services/slices/ordersSlices';
+import { useNavigate } from 'react-router-dom';
+import { selectIsAuthChecked } from '../../services/slices/authSlices';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
+  const isAuthChecked = useSelector(selectIsAuthChecked)
 
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const constructorItems = useSelector(selectConstructorItems)
-
   const orderRequest = useSelector(selectOrderRequest)
-
   const orderModalData = useSelector(selectOrderModalData)
 
+
   const onOrderClick = () => {
-    if (constructorItems.bun._id || constructorItems.ingredients.length) {
+    if (!isAuthChecked) {
+      return navigate('/login', { replace: true });
+    }
+
+    if (constructorItems.bun._id && constructorItems.ingredients.length) {
       const ingredientsIds = constructorItems.ingredients.map(
         (item) => item._id
       );
+
       dispatch(
         fetchOrderBurger([
+          constructorItems.bun._id,
           ...ingredientsIds,
+          constructorItems.bun._id,
         ])
       );
     };

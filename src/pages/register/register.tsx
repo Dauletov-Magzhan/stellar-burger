@@ -22,7 +22,7 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(register(registerData)).then(() => dispatch(getUser()))
+    dispatch(register(registerData))
   };
 
   if (isLoading) {
