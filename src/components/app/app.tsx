@@ -14,7 +14,7 @@ import {
   NotFound404
 } from '@pages';
 
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlices';
@@ -25,6 +25,8 @@ import { getUser, initializeAuth } from '../../services/slices/authSlices';
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const background = location.state?.background;
 
   useEffect(() => {
     dispatch(fetchIngredients());
@@ -40,7 +42,7 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route
@@ -92,7 +94,11 @@ const App = () => {
           }
         />
         <Route path='*' element={<NotFound404 />} />
-        <Route
+      </Routes>
+
+      {background && (
+        <Routes>
+          <Route
           path='/feed/:number'
           element={
             <Modal title='Заказ' onClose={() => closeModal()}>
@@ -118,7 +124,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-      </Routes>
+        </Routes>
+      )}
     </div>
   );
 };
