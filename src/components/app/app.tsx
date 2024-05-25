@@ -97,31 +97,31 @@ const App = () => {
       {background && (
         <Routes>
           <Route
-          path='/feed/:number'
-          element={
-            <Modal title='Заказ' onClose={() => closeModal()}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal title='Детали ингредиента' onClose={() => closeModal()}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
+            path='/feed/:number'
+            element={
               <Modal title='Заказ' onClose={() => closeModal()}>
                 <OrderInfo />
               </Modal>
-            </ProtectedRoute>
-          }
-        />
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Детали ингредиента' onClose={() => closeModal()}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <Modal title='Заказ' onClose={() => closeModal()}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       )}
     </div>

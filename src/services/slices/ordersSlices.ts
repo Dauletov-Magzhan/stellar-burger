@@ -36,14 +36,12 @@ export const fetchOrderBurger = createAsyncThunk(
   async (data: string[]) => orderBurgerApi(data)
 );
 
-export const fetchFeeds = createAsyncThunk(
-  'order/feeds',
-  async () => getFeedsApi()
+export const fetchFeeds = createAsyncThunk('order/feeds', async () =>
+  getFeedsApi()
 );
 
-export const fetchOrders = createAsyncThunk(
-  'order/orders',
-  async () => getOrdersApi()
+export const fetchOrders = createAsyncThunk('order/orders', async () =>
+  getOrdersApi()
 );
 
 export const ordersSlices = createSlice({
@@ -53,7 +51,7 @@ export const ordersSlices = createSlice({
     closeOrderModalData(state) {
       state.orderRequest = false;
       state.orderModalData = null;
-    },
+    }
   },
   selectors: {
     selectOrderModalData: (state) => state.orderModalData,
@@ -67,13 +65,13 @@ export const ordersSlices = createSlice({
     builder
       .addCase(fetchOrderBurger.fulfilled, (state, action) => {
         state.orderModalData = action.payload.order;
-        state.constructorItems = {
+        (state.constructorItems = {
           bun: {
             price: 0
           },
           ingredients: []
-        },
-        state.orderRequest = false;
+        }),
+          (state.orderRequest = false);
       })
       .addCase(fetchOrderBurger.pending, (state) => {
         state.orderRequest = true;

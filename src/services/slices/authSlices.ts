@@ -35,20 +35,19 @@ export const register = createAsyncThunk(
   async (data: TRegisterData) => registerUserApi(data)
 );
 
-export const login = createAsyncThunk(
-  'auth/login',
-  async (data: TLoginData) => loginUserApi(data)
+export const login = createAsyncThunk('auth/login', async (data: TLoginData) =>
+  loginUserApi(data)
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => logoutApi()
-);
+export const logout = createAsyncThunk('auth/logout', async () => logoutApi());
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
   async (data: Partial<TRegisterData>) => updateUserApi(data)
 );
 
-export const getUser = createAsyncThunk('auth/getUser', async () => getUserApi()
+export const getUser = createAsyncThunk('auth/getUser', async () =>
+  getUserApi()
 );
 
 export const authSlices = createSlice({

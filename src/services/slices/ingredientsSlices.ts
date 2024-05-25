@@ -108,5 +108,10 @@ export const {
   selectConstructorItems,
   selectIsModalOpened
 } = ingredientsSlices.selectors;
-export const { addIngredient, removeIngredient, moveDownIngredient, moveUpIngredient } = ingredientsSlices.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  moveDownIngredient,
+  moveUpIngredient
+} = ingredientsSlices.actions;
 export default ingredientsSlices.reducer;

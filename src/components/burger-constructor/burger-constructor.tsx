@@ -29,7 +29,7 @@ export const BurgerConstructor: FC = () => {
 
     if (constructorItems.bun._id && constructorItems.ingredients.length) {
       const ingredientsIds = constructorItems.ingredients.map(
-        (item) => item._id  
+        (item) => item._id
       );
 
       dispatch(

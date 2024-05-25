@@ -5,7 +5,6 @@ import { FC, useEffect } from 'react';
 import { fetchFeeds, selectOrders } from '../../services/slices/ordersSlices';
 import { useDispatch, useSelector } from '../../services/store';
 
-
 export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
 
@@ -13,8 +12,8 @@ export const Feed: FC = () => {
   const orders: TOrder[] = useSelector(selectOrders);
 
   useEffect(() => {
-    dispatch(fetchFeeds())
-  }, [])
+    dispatch(fetchFeeds());
+  }, []);
 
   if (!orders.length) {
     return <Preloader />;
