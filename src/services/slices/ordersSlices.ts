@@ -33,38 +33,17 @@ const initialState: OrderInitialState = {
 
 export const fetchOrderBurger = createAsyncThunk(
   'order/orderBurger',
-  async (data: string[], thunkApi) => {
-    try {
-      const res = await orderBurgerApi(data);
-      return res;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
-  }
+  async (data: string[]) => orderBurgerApi(data)
 );
 
 export const fetchFeeds = createAsyncThunk(
   'order/feeds',
-  async (_, thunkApi) => {
-    try {
-      const res = await getFeedsApi();
-      return res;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
-  }
+  async () => getFeedsApi()
 );
 
 export const fetchOrders = createAsyncThunk(
   'order/orders',
-  async (_, thunkApi) => {
-    try {
-      const res = await getOrdersApi();
-      return res;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
-  }
+  async () => getOrdersApi()
 );
 
 export const ordersSlices = createSlice({

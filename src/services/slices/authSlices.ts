@@ -32,57 +32,24 @@ const initialState: AuthState = {
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (data: TRegisterData, thunkApi) => {
-    try {
-      const res = await registerUserApi(data);
-      return res;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
-  }
+  async (data: TRegisterData) => registerUserApi(data)
 );
 
 export const login = createAsyncThunk(
   'auth/login',
-  async (data: TLoginData, thunkApi) => {
-    try {
-      const res = await loginUserApi(data);
-      return res;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
-  }
+  async (data: TLoginData) => loginUserApi(data)
 );
 
-export const logout = createAsyncThunk('auth/logout', async (_, thunkApi) => {
-  try {
-    const res = await logoutApi();
-    return res;
-  } catch (err) {
-    return thunkApi.rejectWithValue(err);
-  }
-});
+export const logout = createAsyncThunk('auth/logout', async () => logoutApi()
+);
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
-  async (data: Partial<TRegisterData>, thunkApi) => {
-    try {
-      const res = await updateUserApi(data);
-      return res;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
-  }
+  async (data: Partial<TRegisterData>) => updateUserApi(data)
 );
 
-export const getUser = createAsyncThunk('auth/getUser', async (_, thunkApi) => {
-  try {
-    const res = await getUserApi();
-    return res;
-  } catch (err) {
-    return thunkApi.rejectWithValue(err);
-  }
-});
+export const getUser = createAsyncThunk('auth/getUser', async () => getUserApi()
+);
 
 export const authSlices = createSlice({
   name: 'auth',

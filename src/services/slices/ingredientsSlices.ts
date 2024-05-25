@@ -5,7 +5,7 @@ import {
   TConstructorIngredient,
   TConstructorItems
 } from '@utils-types';
-import { v4 } from 'uuid';
+import { v4 as uuid4 } from 'uuid';
 
 interface IngredientsInitialState {
   ingredients: TIngredient[];
@@ -31,14 +31,7 @@ const initialState: IngredientsInitialState = {
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
-  async (_, thunkAPI) => {
-    try {
-      const res = await getIngredientsApi();
-      return res;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err);
-    }
-  }
+  async () => getIngredientsApi()
 );
 
 const ingredientsSlices = createSlice({
@@ -51,7 +44,7 @@ const ingredientsSlices = createSlice({
       } else {
         state.constructorItems.ingredients.push({
           ...action.payload,
-          id: v4()
+          id: uuid4()
         });
       }
     },
