@@ -57,6 +57,30 @@ const ingredientsSlices = createSlice({
         state.constructorItems.ingredients.filter(
           (_, ingredient) => ingredient !== ingredientId
         );
+    },
+    moveUpIngredient(state, action: PayloadAction<TConstructorIngredient>) {
+      const ingredientIndex = state.constructorItems.ingredients.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      const prevItem = state.constructorItems.ingredients[ingredientIndex - 1];
+      state.constructorItems.ingredients.splice(
+        ingredientIndex - 1,
+        2,
+        action.payload,
+        prevItem
+      );
+    },
+    moveDownIngredient(state, action: PayloadAction<TConstructorIngredient>) {
+      const ingredientIndex = state.constructorItems.ingredients.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      const nextItem = state.constructorItems.ingredients[ingredientIndex + 1];
+      state.constructorItems.ingredients.splice(
+        ingredientIndex,
+        2,
+        nextItem,
+        action.payload
+      );
     }
   },
   selectors: {
@@ -84,5 +108,5 @@ export const {
   selectConstructorItems,
   selectIsModalOpened
 } = ingredientsSlices.selectors;
-export const { addIngredient, removeIngredient } = ingredientsSlices.actions;
+export const { addIngredient, removeIngredient, moveDownIngredient, moveUpIngredient } = ingredientsSlices.actions;
 export default ingredientsSlices.reducer;

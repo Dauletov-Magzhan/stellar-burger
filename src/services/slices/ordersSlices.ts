@@ -53,13 +53,7 @@ export const ordersSlices = createSlice({
     closeOrderModalData(state) {
       state.orderRequest = false;
       state.orderModalData = null;
-      state.constructorItems = {
-        bun: {
-          price: 0
-        },
-        ingredients: []
-      };
-    }
+    },
   },
   selectors: {
     selectOrderModalData: (state) => state.orderModalData,
@@ -73,13 +67,13 @@ export const ordersSlices = createSlice({
     builder
       .addCase(fetchOrderBurger.fulfilled, (state, action) => {
         state.orderModalData = action.payload.order;
-        (state.constructorItems = {
+        state.constructorItems = {
           bun: {
             price: 0
           },
           ingredients: []
-        }),
-          (state.orderRequest = false);
+        },
+        state.orderRequest = false;
       })
       .addCase(fetchOrderBurger.pending, (state) => {
         state.orderRequest = true;

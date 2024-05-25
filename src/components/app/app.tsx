@@ -18,7 +18,6 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlices';
-import { fetchFeeds } from '../../services/slices/ordersSlices';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { getUser, initializeAuth } from '../../services/slices/authSlices';
 
@@ -30,7 +29,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch(fetchFeeds());
     dispatch(initializeAuth());
     dispatch(getUser());
   }, []);
