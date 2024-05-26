@@ -1,4 +1,9 @@
-import { getFeedsApi, getOrdersApi, orderBurgerApi } from '@api';
+import {
+  getFeedsApi,
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TConstructorItems, TIngredient, TOrder } from '@utils-types';
 
@@ -12,6 +17,7 @@ interface OrderInitialState {
   userOrders: TOrder[];
   constructorItems: TConstructorItems;
   error: string;
+  userOrdersByNumber: TOrder[];
 }
 
 const initialState: OrderInitialState = {
@@ -28,7 +34,8 @@ const initialState: OrderInitialState = {
     ingredients: []
   },
   userOrders: [],
-  error: ''
+  error: '',
+  userOrdersByNumber: []
 };
 
 export const fetchOrderBurger = createAsyncThunk(
@@ -42,6 +49,11 @@ export const fetchFeeds = createAsyncThunk('order/feeds', async () =>
 
 export const fetchOrders = createAsyncThunk('order/orders', async () =>
   getOrdersApi()
+);
+
+export const fetchOrderByNumber = createAsyncThunk(
+  'order/OrderByNumber',
+  async (number: number) => getOrderByNumberApi(number)
 );
 
 export const ordersSlices = createSlice({
@@ -59,7 +71,8 @@ export const ordersSlices = createSlice({
     selectOrders: (state) => state.orders,
     selectOredersTotal: (state) => state.ordersTotal,
     selectOrdersToday: (state) => state.ordersToday,
-    selectUserOrders: (state) => state.userOrders
+    selectUserOrders: (state) => state.userOrders,
+    selectUserOrdersByNumber: (state) => state.userOrdersByNumber
   },
   extraReducers: (builder) => {
     builder
@@ -89,6 +102,9 @@ export const ordersSlices = createSlice({
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.userOrders = action.payload;
+      })
+      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
+        state.userOrdersByNumber = action.payload.orders;
       });
   }
 });
@@ -99,7 +115,8 @@ export const {
   selectOrders,
   selectOrdersToday,
   selectOredersTotal,
-  selectUserOrders
+  selectUserOrders,
+  selectUserOrdersByNumber
 } = ordersSlices.selectors;
 export const { closeOrderModalData } = ordersSlices.actions;
 export default ordersSlices.reducer;
