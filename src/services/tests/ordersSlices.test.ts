@@ -13,7 +13,6 @@ import ordersSlices, {
 } from '../slices/ordersSlices';
 import { orderMockStore } from '../mocks/ordersSlicesMocks';
 
-
 const initialStore = () =>
   configureStore({
     reducer: {
