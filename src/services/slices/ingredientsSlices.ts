@@ -1,4 +1,4 @@
-import { getIngredientsApi } from '@api';
+import { getIngredientsApi } from '../../utils/burger-api';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   TIngredient,
