@@ -3,7 +3,7 @@ import {
   getOrderByNumberApi,
   getOrdersApi,
   orderBurgerApi
-} from '@api';
+} from '../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TConstructorItems, TIngredient, TOrder } from '@utils-types';
 
@@ -78,13 +78,13 @@ export const ordersSlices = createSlice({
     builder
       .addCase(fetchOrderBurger.fulfilled, (state, action) => {
         state.orderModalData = action.payload.order;
-        (state.constructorItems = {
+        state.constructorItems = {
           bun: {
             price: 0
           },
           ingredients: []
-        }),
-          (state.orderRequest = false);
+        }
+        state.orderRequest = false;
       })
       .addCase(fetchOrderBurger.pending, (state) => {
         state.orderRequest = true;
