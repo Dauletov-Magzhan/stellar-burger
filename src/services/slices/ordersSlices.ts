@@ -83,7 +83,7 @@ export const ordersSlices = createSlice({
             price: 0
           },
           ingredients: []
-        }
+        };
         state.orderRequest = false;
       })
       .addCase(fetchOrderBurger.pending, (state) => {
