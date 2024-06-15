@@ -1,28 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ingredientsSlices, {addIngredient, removeIngredient, moveDownIngredient, moveUpIngredient, selectConstructorItems} from "./ingredientsSlices";
+import ingredientsSlices, {addIngredient, removeIngredient, moveDownIngredient, moveUpIngredient, selectConstructorItems, selectIngredients, selectIsModalOpened, fetchIngredients} from "./ingredientsSlices";
 import { mockBun, mockIngredient, mockStore } from "../mocks/ingredientsSlicesMocks";
-import { before } from "node:test";
 
+const initialStore = () => {
+    return configureStore({
+        reducer: {
+            ingredients: ingredientsSlices,
+        },
+        preloadedState: {
+            ingredients: mockStore
+          }
+    })
+}
 
 describe('Тесты синхронных экшенов', () => {
 
-    const initialStore = () => {
-        return configureStore({
-            reducer: {
-                ingredients: ingredientsSlices,
-            },
-            preloadedState: {
-                ingredients: mockStore
-              }
-        })
-    }
-
     it('Тест на добавление ингредиента с экшеном "addIngredient"', () => {
         const store = initialStore()
-
         store.dispatch(addIngredient(mockIngredient))
         store.dispatch(addIngredient(mockBun))
-
         const constructorItems = selectConstructorItems(store.getState())
         expect(constructorItems.ingredients.length).toBe(4)
         expect(constructorItems.bun.name).toBe('Краторная булка N-200i')
@@ -39,17 +35,50 @@ describe('Тесты синхронных экшенов', () => {
 
     it('Тест на изменение порядка ингредиента в конструкторе c экшеном "moveDownIngredient"', () => {
         const store = initialStore()
-
         const moveIngredient = selectConstructorItems(store.getState()).ingredients[0]
         store.dispatch(moveDownIngredient(moveIngredient))
         expect(selectConstructorItems(store.getState()).ingredients[1]).toEqual(moveIngredient)
     })
 
-    it('Тест на изменение порядка ингредиента в конструкторе c экшеном "moveDownIngredient"', () => {
+    it('Тест на изменение порядка ингредиента в конструкторе c экшеном "moveUpIngredient"', () => {
         const store = initialStore()
-
         const moveIngredient = selectConstructorItems(store.getState()).ingredients[2]
         store.dispatch(moveUpIngredient(moveIngredient))
         expect(selectConstructorItems(store.getState()).ingredients[1]).toEqual(moveIngredient)
+    })
+})
+
+describe('Тесты селекторов', () => {
+    it('Тест селектора "selectIngredients"', () => {
+        const store = initialStore()
+        const ingredients = selectIngredients(store.getState())
+        expect(ingredients).toEqual(mockStore.ingredients)
+    })
+
+    it('Тест селектора "selectConstructorItems"', () => {
+        const store = initialStore()
+        const constructorItems = selectConstructorItems(store.getState())
+        expect(constructorItems).toEqual(mockStore.constructorItems)
+    })
+
+    it('Тест селектора "selectIsModalOpened"', () => {
+        const store = initialStore()
+        const isModalOpened = selectIsModalOpened(store.getState())
+        expect(isModalOpened).toEqual(mockStore.isModalOpened)
+    })
+})
+
+describe('Тесты асинхронных экшенов', () => {
+    it('Тест загрузки ингредиентов', async () => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                json: () => Promise.resolve(mockStore.ingredients),
+            })
+        ) as jest.Mock;
+
+        const store = initialStore()
+        await store.dispatch(fetchIngredients())
+        const {ingredients} = store.getState().ingredients
+        expect(ingredients).toEqual(mockStore.ingredients)
     })
 })
