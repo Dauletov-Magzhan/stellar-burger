@@ -5,7 +5,13 @@
 
 import type { JestConfigWithTsJest } from 'ts-jest';
 
+module.exports = {
+  testEnvironment: 'jsdom',
+  // другие настройки Jest
+};
+
 const config: JestConfigWithTsJest = {
+  
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 

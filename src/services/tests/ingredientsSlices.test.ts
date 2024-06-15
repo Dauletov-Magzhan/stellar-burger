@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ingredientsSlices, {addIngredient, removeIngredient, moveDownIngredient, moveUpIngredient, selectConstructorItems, selectIngredients, selectIsModalOpened, fetchIngredients} from "./ingredientsSlices";
+import ingredientsSlices, {addIngredient, removeIngredient, moveDownIngredient, moveUpIngredient, selectConstructorItems, selectIngredients, selectIsModalOpened, fetchIngredients} from "../slices/ingredientsSlices";
 import { mockBun, mockIngredient, mockStore } from "../mocks/ingredientsSlicesMocks";
 
 const initialStore = () => {
@@ -13,8 +13,7 @@ const initialStore = () => {
     })
 }
 
-describe('Тесты синхронных экшенов', () => {
-
+describe('Тест ingredientsSlices', () => {
     it('Тест на добавление ингредиента с экшеном "addIngredient"', () => {
         const store = initialStore()
         store.dispatch(addIngredient(mockIngredient))
@@ -46,9 +45,7 @@ describe('Тесты синхронных экшенов', () => {
         store.dispatch(moveUpIngredient(moveIngredient))
         expect(selectConstructorItems(store.getState()).ingredients[1]).toEqual(moveIngredient)
     })
-})
 
-describe('Тесты селекторов', () => {
     it('Тест селектора "selectIngredients"', () => {
         const store = initialStore()
         const ingredients = selectIngredients(store.getState())
@@ -66,9 +63,7 @@ describe('Тесты селекторов', () => {
         const isModalOpened = selectIsModalOpened(store.getState())
         expect(isModalOpened).toEqual(mockStore.isModalOpened)
     })
-})
 
-describe('Тесты асинхронных экшенов', () => {
     it('Тест загрузки ингредиентов', async () => {
         global.fetch = jest.fn(() =>
             Promise.resolve({
@@ -80,5 +75,6 @@ describe('Тесты асинхронных экшенов', () => {
         await store.dispatch(fetchIngredients())
         const {ingredients} = store.getState().ingredients
         expect(ingredients).toEqual(mockStore.ingredients)
+        expect(global.fetch).toHaveBeenCalledTimes(1)
     })
 })
