@@ -6,7 +6,7 @@ import {
   logoutApi,
   registerUserApi,
   updateUserApi
-} from '@api';
+} from '../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
@@ -19,7 +19,7 @@ interface AuthState {
   accessToken: string | null;
 }
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   user: {
     name: '',
     email: ''
